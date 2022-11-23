@@ -153,3 +153,28 @@ Installed:
 Complete!
 
 
+<li>	Start DataPower</li>
+
+  </li>
+  <ul>
+      <li>systemctl start datapower</li>
+  </ul>
+  </li>
+  
+  <li>Use one of the three commands login to datapower</li>
+
+  </li>
+  <ul>
+      <li>telnet 127.0.0.1 2200</li>
+      <li>nc 127.0.0.1 2200</li>
+      <li>bash -c "cat < /dev/tcp/127.0.0.1/2200"</li>
+ </ul>
+  <li>	Login as admin/admin and will prompt you to change your password,(Changing your password is required)</li>      
+        
+        
+  
+ 
+  
+  
+
+  
