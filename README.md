@@ -200,6 +200,79 @@ Complete!
  <li>Login to web-ui using the updated password</li>
  <li>Search for “XML management interface” and enable with all defaults.</li>
  <li>Search for “REST” and enable with all defaults.</li>
+        
+==DOMAIN-IMPORT SHELL SCRIPT==
+        
+
+#!/bin/bash
+        
+SOMA_USER=<user>
+        
+SOMA_PSW=<password>
+        
+#SOMA URL will be local address or remote EC2
+        
+SOMA_URL=https://127.0.0.1:5550 
+        
+OVERWRITE_FILES=false
+        
+OVERWRITE_OBJECTS=false
+        
+
+#Change the astrix (*) to EC2 instance location where folder resides, if you want to connect to #git webhook
+        
+for dir in */; do
+        
+    # create domain if it doesn't exist
+        
+    for file in "$dir"*; do
+        
+        # if key/cert, upload file
+        
+                 # possibly split shared certs for either upload type or "default" domain
+        
+                 # create key/cert object
+        
+	if [[ "${file: -4}" == ".zip" ]] ; then
+        
+		FILE_B64=$(base64 $file)
+        
+SOMA_REQ=$(cat <<EOF
+        
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dp="http://www.datapower.com/schemas/management">
+        
+   <soapenv:Header/>
+        
+   <soapenv:Body>
+        
+      <dp:request domain="${dir:0:-1}">
+        
+         <dp:do-import source-type="ZIP" overwrite-files="$OVERWRITE_FILES" overwrite-objects="$OVERWRITE_OBJECTS">
+        
+            <dp:input-file>$FILE_B64</dp:input-file>
+        
+         </dp:do-import>
+        
+      </dp:request>
+        
+   </soapenv:Body>
+        
+</soapenv:Envelope>
+        
+EOF
+        
+)
+        
+echo $SOMA_REQ > /tmp/1.req
+        
+curl -k -u $SOMA_USER:$SOMA_PSW --request POST $SOMA_URL -d @/tmp/1.req
+        
+fi	
+        
+    done
+        
+done	
+        
 
 
         
