@@ -169,7 +169,39 @@ Complete!
       <li>nc 127.0.0.1 2200</li>
       <li>bash -c "cat < /dev/tcp/127.0.0.1/2200"</li>
  </ul>
-  <li>	Login as admin/admin and will prompt you to change your password,(Changing your password is required)</li>      
+  <li>	Login as admin/admin and will prompt you to change your password,(Changing your password is required)</li>   
+        
+  <li>Run below command to configure.</li>
+        <ul>
+      <li>idg# co</li>
+      <li>Global mode</li>
+      <li>idg(config)# web-mgmt 0 9090 9090</li>
+        </ul>
+
+<li>Output</li> 
+        <ul>
+      <li>Web management: successfully started</li>
+        </ul>
+<li>idg(config)# write memory</li> 
+
+<li>Output</li> 
+         <ul>
+      <li>Overwrite previously saved configuration? Yes/No [y/n]: y</li>
+        <li>Configuration saved successfully.</li>
+        </ul>
+        
+ <li>Exit</li> 
+         <ul>
+      <li>idg(config)# exit</li>
+        <li>Overwrite previously saved configuration? Yes/No [y/n]: y</li>
+        <li>Configuration saved successfully.</li>
+        </ul>
+
+ <li>Login to web-ui using the updated password</li>
+ <li>Search for “XML management interface” and enable with all defaults.</li>
+ <li>Search for “REST” and enable with all defaults.</li>
+
+
         
         
   
