@@ -269,7 +269,66 @@ fi
     done
         
 done	
-        
+
+<h2>Appendix</h2>
+
+  <li>Commands</li> 
+         <ul>
+      <li>Get all domains </li>
+      
+         curl -k -u admin:adminadmin --request GET https://127.0.0.1:5554/mgmt/domains/config/
+	 
+</ul>
+
+  <li>Creating a domain</li> 
+         
+            
+         curl -k -u admin:adminadmin --request PUT https://127.0.0.1:5554/mgmt/config/default/Domain/test -H "Content-Type: application/json" -d '{  "Domain": {    "name": "test",    "mAdminState": "enabled"  }}'
+	 
+
+<li>Import the domain </li> 
+	 
+	 FILE_B64=$(base64 genericexport10112022.zip)
+	 SOMA_REQ=$(cat <<EOF
+	 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dp="http://www.datapower.com/schemas/management">
+   	 <soapenv:Header/>
+   	 <soapenv:Body>
+         <dp:request domain="Generic">
+         <dp:do-import source-type="ZIP" overwrite-files="true" overwrite-objects="true">
+         <dp:input-file>$FILE_B64</dp:input-file>
+         </dp:do-import>
+         </dp:request>
+         </soapenv:Body>
+         </soapenv:Envelope>
+         EOF
+         )
+
+echo $SOMA_REQ > /tmp/1.req
+
+curl -k -u $SOMA_USER:$SOMA_PSW --request POST $SOMA_URL -d @/tmp/1.req
+
+<li>Upload the key/cert as a file  </li> 
+
+	FILE_B64_CRYPTO=$(base64 webgui-sscert.pem)
+	SOMA_REQ_CRYPTO=$(cat <<EOF
+	<soapenv:Envelope 
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+        xmlns:dp="http://www.datapower.com/schemas/management">
+        <soapenv:Header/>
+        <soapenv:Body>
+        <dp:request domain="default">
+        <dp:set-file name="cert:///webgui-sscert.pem">$FILE_B64_CRYPTO</dp:set-file> 
+        </dp:request>
+        </soapenv:Body>
+        </soapenv:Envelope>
+        EOF
+        )
+echo $SOMA_REQ_CRYPTO > /tmp/2.req
+curl -k -u $SOMA_USER:$SOMA_PSW --request POST $SOMA_URL -d @/tmp/2.req
+
+	 
+
+     
 
 
         
