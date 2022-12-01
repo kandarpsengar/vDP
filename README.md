@@ -9,8 +9,7 @@
 </ul>
 <h2>Prerequisites: </h2>
 
-sudo yum install telnet
-•	Install Python 3
+
 o	wget https://www.python.org/ftp/python/3.10.5/Python-3.10.5.tgz
 o	tar xzf Python-3.10.5.tgz
 <ul>
