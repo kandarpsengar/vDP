@@ -10,8 +10,6 @@
 <h2>Prerequisites: </h2>
 
 
-o	wget https://www.python.org/ftp/python/3.10.5/Python-3.10.5.tgz
-o	tar xzf Python-3.10.5.tgz
 <ul>
   <li>Make sure the version of Linux RHEL is compatible with DataPower</li>
   <li>Install Telnet if you can using command</li>
