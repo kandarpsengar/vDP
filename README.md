@@ -330,8 +330,7 @@ curl -k -u $SOMA_USER:$SOMA_PSW --request POST $SOMA_URL -d @/tmp/2.req
 
      
 
-
-        
+       
         
   
  
