@@ -5,6 +5,7 @@
 <ul>
   <li>DataPower Gateway for Linux : https://www.ibm.com/docs/en/datapower-gateway/10.5?topic=virtual-datapower-gateway-linux</li>
   <li>Software link (IBM): https://w3east-limited-use.cpc.ibm.com/isc/esd/dswdown/home?ticket=Xa.2%2FXb.ddeX-Pn5_UKDYD1[…]2FXi.%2FXY.knac%2FXZ.w2pFXrBgEeGsT61hXmhfBTTs6sUFhFAF</li>
+<li>Minimum System Requirements:	https://www.ibm.com/software/reports/compatibility/clarity-reports/report/html/softwareReqsForProduct?deliverableId=427BEAC0EDBA11ECBEE19EDF136D6557&osPlatforms=Linux&duComponentIds=S006|S007|S004|S005|S003|S002|S001|C010|C009|C008&mandatoryCapIds=16&optionalCapIds=30|341|126|9|1|35|121|20|42|184|185|32|16|33|27|69|124|15|223|26 </li>
   <li>Software (Customer): Passport Advantage</li>
 </ul>
 <h2>Prerequisites: </h2>
@@ -14,12 +15,12 @@
   <li>Make sure the version of Linux RHEL is compatible with DataPower</li>
   <li>Install Telnet if you can using command</li>
    <ul>
-      <li>sudo yum install telnet</li>
+	   <code>sudo yum install telnet</code>
     </ul>
   <li>Install Python 3</li>
   <ul>
-      <li>wget https://www.python.org/ftp/python/3.10.5/Python-3.10.5.tgz</li>
-      <li>tar xzf Python-3.10.5.tgz</li>
+	  <code>wget https://www.python.org/ftp/python/3.10.5/Python-3.10.5.tgz</code>
+	  <code>tar xzf Python-3.10.5.tgz</code>
     </ul>
 </ul>
 <h2>Steps: </h2>
@@ -27,11 +28,14 @@
 <li>	Login to EC2 Instance</li>
 <li>	Make sure the pre-requisite is met as per the system requirements.</li>
 <li>Download the DataPower Software from the above link </li>
-<li>Copy the certificate files certreport39.zip and KeywithIDCredReport.zip (These are the in the box folder, reach out to Kandarp or Patrick)</li>
+<li>Copy the certificate files certreport39.zip and KeywithIDCredReport.zip (These are the in the box folder, mailto: kandarp.sengar@ibm.com or patrick.bennett@ibm.com )</li>
 <li>Install the Data Power by running the below command.</li>
-sudo yum install idg_lx10502.lts.nonprod.image.x86_64.rpm idg_lx10502.lts.common.x86_64.rpm
+	
+<code>sudo yum install idg_lx10502.lts.nonprod.image.x86_64.rpm idg_lx10502.lts.common.x86_64.rpm </code>
+	
 <li>	Output from the above.</li>
-Updating Subscription Management repositories.
+	
+<em> Updating Subscription Management repositories.
 Unable to read consumer identity
 
 This system is not registered with an entitlement server. You can use subscription-manager to register.
@@ -47,9 +51,7 @@ Dependencies resolved.
 ===================================================================================
 Installing:
 
- ibm-datapower-agoradco-nonpd-image
- 
-                         x86_64 10.5.0.2.345566-1 @commandline               3.1 G
+ ibm-datapower-agoradco-nonpd-image  x86_64 10.5.0.2.345566-1 @commandline               3.1 G
                          
  ibm-datapower-common    x86_64 10.5.0.2.345566-1 @commandline               660 k
  
@@ -147,7 +149,7 @@ Installed:
   schroot-1.6.10-10.el8.x86_64                                  
   
 
-Complete!
+Complete! </em>
 
 
 <li>	Start DataPower</li>
@@ -198,7 +200,8 @@ Complete!
  <li>Search for “XML management interface” and enable with all defaults.</li>
  <li>Search for “REST” and enable with all defaults.</li>
         
-==DOMAIN-IMPORT SHELL SCRIPT==
+<h2>Domain Import Shell Script to create the domain if it doesn't exist</h2>
+
         
 
 #!/bin/bash
@@ -218,42 +221,24 @@ OVERWRITE_OBJECTS=false
 
 #Change the astrix (*) to EC2 instance location where folder resides, if you want to connect to #git webhook
         
-for dir in */; do
-        
-    # create domain if it doesn't exist
-        
-    for file in "$dir"*; do
-        
-        # if key/cert, upload file
-        
-                 # possibly split shared certs for either upload type or "default" domain
-        
-                 # create key/cert object
-        
-	if [[ "${file: -4}" == ".zip" ]] ; then
-        
-		FILE_B64=$(base64 $file)
-        
-SOMA_REQ=$(cat <<EOF
-        
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dp="http://www.datapower.com/schemas/management">
-        
-   <soapenv:Header/>
-        
-   <soapenv:Body>
-        
-      <dp:request domain="${dir:0:-1}">
-        
-         <dp:do-import source-type="ZIP" overwrite-files="$OVERWRITE_FILES" overwrite-objects="$OVERWRITE_OBJECTS">
-        
-            <dp:input-file>$FILE_B64</dp:input-file>
-        
-         </dp:do-import>
-        
-      </dp:request>
-        
-   </soapenv:Body>
-        
+for dir in */; do        
+    # create domain if it doesn't exist        
+    for file in "$dir"*; do        
+        # if key/cert, upload file        
+                 # possibly split shared certs for either upload type or "default" domain        
+                 # create key/cert object        
+	if [[ "${file: -4}" == ".zip" ]] ; then        
+		FILE_B64=$(base64 $file)        
+SOMA_REQ=$(cat <<EOF        
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dp="http://www.datapower.com/schemas/management">        
+   <soapenv:Header/>        
+   <soapenv:Body>        
+      <dp:request domain="${dir:0:-1}">        
+         <dp:do-import source-type="ZIP" overwrite-files="$OVERWRITE_FILES" overwrite-objects="$OVERWRITE_OBJECTS">        
+            <dp:input-file>$FILE_B64</dp:input-file>        
+         </dp:do-import>        
+      </dp:request>        
+   </soapenv:Body>        
 </soapenv:Envelope>
         
 EOF
@@ -265,8 +250,7 @@ echo $SOMA_REQ > /tmp/1.req
 curl -k -u $SOMA_USER:$SOMA_PSW --request POST $SOMA_URL -d @/tmp/1.req
         
 fi	
-        
-    done
+      done
         
 done	
 
