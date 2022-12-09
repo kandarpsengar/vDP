@@ -156,7 +156,7 @@ Complete! </em>
 
   </li>
   <ul>
-      <li>systemctl start datapower</li>
+      <code>systemctl start datapower </code>
   </ul>
   </li>
   
@@ -172,7 +172,7 @@ Complete! </em>
         
   <li>Run below command to configure.</li>
         <ul>
-      <li>idg# co</li>
+      <code>idg# co</code>
       <li>Global mode</li>
       <li>idg(config)# web-mgmt 0 9090 9090</li>
         </ul>
@@ -308,6 +308,7 @@ curl -k -u $SOMA_USER:$SOMA_PSW --request POST $SOMA_URL -d @/tmp/1.req
         EOF
         )
 echo $SOMA_REQ_CRYPTO > /tmp/2.req
+	      
 curl -k -u $SOMA_USER:$SOMA_PSW --request POST $SOMA_URL -d @/tmp/2.req
 
 	 
